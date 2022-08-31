@@ -1,0 +1,49 @@
+{
+  "name": "vue",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.0.0",
+    "@fortawesome/fontawesome-svg-core": "^6.1.1",
+    "@fortawesome/free-solid-svg-icons": "^6.1.1",
+    "@fortawesome/vue-fontawesome": "^2.0.8",
+    "@popperjs/core": "^2.11.5",
+    "@progress/kendo-vue-excel-export": "^3.4.2",
+    "axios": "^0.26.1",
+    "bootstrap": "^5.2.0-beta1",
+    "bootstrap-vue": "^2.22.0",
+    "core-js": "^3.8.3",
+    "eslint": "^7.32.0",
+    "eslint-plugin-vue": "^8.0.3",
+    "export-from-json": "^1.6.0",
+    "jquery": "^3.6.0",
+    "moment": "^2.29.4",
+    "portal-vue": "^2.1.7",
+    "table2excel": "^1.0.4",
+    "vue": "^2.7.1",
+    "vue-excel-export": "^0.1.3",
+    "vue-json-excel": "^0.3.0",
+    "vue-router": "^3.5.1",
+    "vuejs-smart-table": "^0.0.8",
+    "vuex": "^3.6.2",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.16",
+    "@babel/eslint-parser": "^7.12.16",
+    "@vue/cli-plugin-babel": "~5.0.0",
+    "@vue/cli-plugin-router": "~5.0.0",
+    "@vue/cli-plugin-vuex": "~5.0.0",
+    "@vue/cli-service": "~5.0.0",
+    "eslint": "^7.32.0",
+    "eslint-plugin-vue": "^8.0.3",
+    "sass": "^1.32.7",
+    "sass-loader": "^12.0.0",
+    "vue-template-compiler": "^2.6.14"
+  }
+}

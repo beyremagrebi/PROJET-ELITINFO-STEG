@@ -3,13 +3,12 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import PortalVue from 'portal-vue'
-import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
-import "@fortawesome/fontawesome-free/css/all.css";
 
+import "@fortawesome/fontawesome-free/css/all.css";
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 // Import Bootstrap and BootstrapVue CSS files (order is important)
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-
 Vue.config.productionTip = false;
 import Axios from "axios"
 import SmartTable from 'vuejs-smart-table'

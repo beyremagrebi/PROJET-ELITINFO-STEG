@@ -3,13 +3,6 @@
 namespace App\Exports;
 
 use Maatwebsite\Excel\Concerns\FromArray;
-use Illuminate\Support\Facades\DB;
-use Maatwebsite\Excel\Concerns\Exportable;
-use Illuminate\Contracts\Support\Responsable;
-use Maatwebsite\Excel\Concerns\WithMapping;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Arr;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\BeforeExport;
 use Maatwebsite\Excel\Events\BeforeWriting;
@@ -21,72 +14,26 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 class CountryExport implements FromArray,WithEvents,WithCustomStartCell,ShouldAutoSize
 {
     private $data;
+    private $sizeA;
+    private $sizeB;
+    private $Length;
 
-    public function __construct($arrays) 
-    {       $result=[];
-        foreach($arrays as  $array){
-         array_keys($result,$array[0]);
-    
-            foreach($array as $value){
-                
-               array_push($result,$value);
-    
-            }
-           
-            array_push($result,[""]);
-               
-           }
-           $this->data=$result;
+    public function __construct($arrays,$sizeA,$sizeB,$max) 
+    {      
+           $this->data=$arrays;
+           $this->sizeA=$sizeA;
+           $this->Length=$max;
+           $this->sizeB=$sizeB;
     }
 
 
     public function array():Array
     {
+        
        return $this->data;
   
-    }
+    } 
 
-    public function map($arrays): array
-    {
-
-    
-
-        return [
-            [
-                $arrays->Caption,
-                $arrays->codeCompte,
-                $arrays->CodeCompteBancaire
-            ],
-            
-        ];
-        
-    
-    }   
-
-    public function headings(): array
-    {
-        $list = DB::table('ELIT_ListeCompte')->get();
-        $dates=[["debut"=>"2001-01-02","fin"=>"2022-01-02"]];
-        $arrays=[$list,$dates];
-        $result=[];
-        
-        foreach($arrays as  $array){
-            array_push($result,[
-                'Caption',
-                'Code Compte',
-                'Code Compte Bancaire'
-            ]);
-            foreach($array as $value){
-                
-              
-    
-            }
-           
-           
-               
-           }
-        return $result;
-    }
     public function startCell(): string
     {
         return 'B2';
@@ -95,24 +42,120 @@ class CountryExport implements FromArray,WithEvents,WithCustomStartCell,ShouldAu
     public function registerEvents(): array
     {
         return [
+            
             AfterSheet::class=>function(AfterSheet $event){
-
-                $event->sheet->getStyle('B2:E300')->applyFromArray([
-                    'font'=>[
-                        'bold'=>false,
-                       
-                    ],
+                $this->Length+=8;
+                $event->sheet->getStyle('B2:N'.$this->Length)->applyFromArray([
                     'alignment' => [
                         'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
                     ],
                
                 ]);
-                $event->sheet->getStyle('B2:C2')->applyFromArray([
+                $event->sheet->getStyle('B2:N2')->applyFromArray([
                     'font'=>[
                         'bold'=>true,
-                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK,
                     ],
                 ]);
+
+                $event->sheet->getStyle('D5:D6')->applyFromArray([
+                    'font'=>[
+                        'bold'=>true,
+                        
+                    ],
+                    'fill' => [
+                        'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                        'rotation' => 90,
+                        'startColor' => [
+                            'rgb' => '66ff00',
+                        ],
+              
+                    ]
+                ]);
+
+                
+     
+
+                $event->sheet->getStyle('I5:I6')->applyFromArray([
+                    'font'=>[
+                        'bold'=>true,
+                    ],
+                    'fill' => [
+                        'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                        'rotation' => 90,
+                        'startColor' => [
+                            'rgb' => '5454df',
+                        ],
+              
+                    ]
+                ]);
+
+   
+
+                
+                $event->sheet->getStyle('B8:E8')->applyFromArray([
+                    'font'=>[
+                        'bold'=>true,
+                    ],
+                    'fill' => [
+                        'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                        'rotation' => 90,
+                        'startColor' => [
+                            'rgb' => '008cff',
+                        ],
+              
+                    ],
+                ]);
+
+                $event->sheet->getStyle('G8:J8')->applyFromArray([
+                    'font'=>[
+                        'bold'=>true,
+                    ],
+                    'fill' => [
+                        'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                        'rotation' => 90,
+                        'startColor' => [
+                            'rgb' => '008cff',
+                        ],
+              
+                    ],
+                ]);
+
+                $event->sheet->getStyle('C2:E3')->applyFromArray([
+                    'font'=>[
+                        'bold'=>true,
+                    ],
+                    'fill' => [
+                        'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                        'rotation' => 90,
+                        'startColor' => [
+                            'rgb' => 'ffff00',
+                        ],
+              
+                    ],
+                ]);
+                
+                $this->sizeA+=8;
+                $event->sheet->getStyle('B8:E'.$this->sizeA)->applyFromArray([
+                    'borders' => [
+                        'allBorders' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_MEDIUM,
+                            'color' => ['argb' => '00000000'],
+                        ],
+                    ]
+                ]);
+
+                $this->sizeB+=8;
+                $event->sheet->getStyle('G8:J'.$this->sizeB)->applyFromArray([
+                    'borders' => [
+                        'allBorders' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_MEDIUM,
+                            'color' => ['argb' => '00000000'],
+                        ],
+                    ]
+                ]);
+
+
+        
                 
             }
         ];

@@ -1,6 +1,9 @@
 <template>
     <div>
+
         <div class="tables">
+
+                    
          <div class="compteA">
             <h4>Non Rapproché {{form.codeb.substr(0,form.codeb.indexOf('-'))}}</h4>
             <div v-if="loadA">
@@ -19,13 +22,22 @@
             </div>
              <b-collapse  v-if="compteA.length>0" id="collapse-2" class="mt-2">
                 <b-card bg-variant="default">
+                    <div style="display: flex;align-items: center;">
+                    <b-form-input class="mb-4 m-3" style="max-width:400px;" v-model="searchA" placeholder="Recherche selon code"></b-form-input>
+                    <span class="ml-2" v-if="searchA!='' && filtre.length>0" style="color:black;font-weight:bold;">{{filtre.length}} Résultats</span>
+
+                </div>
+                <div class="m-3" v-if="filtre.length==0" style="color:black;font-weight: bold; text-align: left;">
+                        <h5 style="font-weight:800;" >Désolé</h5>
+                        <p>Aucune Résultat Trouvé</p>
+                    </div>
                     <div >
                             <v-table class="compteA-table" 
                             :currentPage.sync="currentPage"
-                             :pageSize="5"
+                             :pageSize="4"
                              @totalPagesChanged="totalPages = $event"
-                            :data="compteA">
-                            <thead slot="head">
+                            :data="filtre">
+                            <thead v-if="filtre.length>0" slot="head">
                                 <th>Code Autorisation</th>
                                 <th>Montant</th>
                                 <th>Date Opération</th>
@@ -33,14 +45,16 @@
                          </thead>
 
              <tbody slot="body" slot-scope="{displayData}">
-                <tr v-for="row in displayData" :key="row.id">
+                <tr v-for="row in displayData" :key="row.id" >
                 <td>{{ row.code }}</td>
                 <td>{{ row.Montant }}</td>
                 <td>{{ row.DateOperation.substr(0,row.DateOperation.indexOf(' '))}}</td>
-                <td>
-                    1
+                <td :id="row.code">
+                    {{row.analyse}}
                 </td>
+                <b-tooltip :target="row.code"  >Il existe {{row.analyse}} fois dans {{form.codeb.substr(0,form.codeb.indexOf('-'))}}</b-tooltip>
                 </tr>
+
             </tbody>
                 </v-table>
                         <div class="pagination">
@@ -56,7 +70,7 @@
                 
 
                 </b-card>
-              
+                
             </b-collapse>
         </div>
         <div class="compteB">
@@ -78,14 +92,21 @@
             </div>
              <b-collapse v-if="compteB.length>0" id="collapse-1" class="mt-2">
                 <b-card>
-
+                    <div style="display: flex;align-items:center">
+                    <b-form-input class="mb-4 m-3" style="max-width:400px;" v-model="searchB" placeholder="Recherche selon code"></b-form-input>
+                    <span class="ml-2" v-if="searchB!='' && filtreB.length>0" style="color:black;font-weight:bold;">{{filtreB.length}} Résultats</span>
+                </div>
+                <div class="m-3" v-if="filtreB.length==0" style="color:black;font-weight: bold; text-align: left;">
+                        <h5 style="font-weight:800;" >Désolé</h5>
+                        <p>Aucune Résultat Trouvé</p>
+                    </div>
                     <div >
                             <v-table class="compteA-table compteB-table" 
                             :currentPage.sync="currentPageB"
-                             :pageSize="5"
+                             :pageSize="4"
                              @totalPagesChanged="totalPagesB = $event"
-                            :data="compteB">
-                            <thead slot="head">
+                            :data="filtreB">
+                            <thead v-if="filtreB.length>0" slot="head">
                                 <th>Code Autorisation</th>
                                 <th>Montant</th>
                                 <th>Date Opération</th>
@@ -100,9 +121,11 @@
                 <td>{{ row.code }}</td>
                 <td>{{ row.montant }}</td>
                 <td>{{ row.dateOperation.substr(0,row.dateOperation.indexOf(' '))}}</td>
-                <td>
-                    1
+                <td v-b-tooltip.right tabindex="0" :id="row.code">
+                    {{row.analyse}}
                 </td>
+                <b-tooltip :target="row.code"  >Il existe {{row.analyse}} fois dans {{form.codeb.substr(form.codeb.indexOf('-')+1)}}</b-tooltip>
+
                 </tr>
             </tbody>
                 </v-table>
@@ -119,7 +142,7 @@
                 
 
                 </b-card>
-              
+                
             </b-collapse>
         </div>
 
@@ -131,7 +154,7 @@
 
 <script>
 export default{
-   // props:['compteA','compteB','form','listcompte','loadA','loadB'],
+   
        props:{
         listcompte:Array,
         form:Object,
@@ -145,15 +168,40 @@ export default{
             currentPage: 1,
             totalPages: 0,
              currentPageB: 1,
-            totalPagesB: 0
+            totalPagesB: 0,
+            searchA:'',
+            searchB:'',
+            id:0,
+            idb:0
         }
     },
     methods:{
 
+    },
+    computed:{
+        filtre(){
+            return this.compteA.filter((compte) =>{
+                if(compte.code==null){
+                    compte.code=""
+                }
+                return compte.code.includes(this.searchA);
+            })
+        },
+        filtreB(){
+            return this.compteB.filter((compteb) =>{
+                if(compteb.code==null){
+                    compteb.code=""
+                }
+                return compteb.code.includes(this.searchB);
+                
+            })
+        }
+    },
+    mounted(){
+        console.log(this.compteA);
     }
 }
-</script>
-
+</script>,
 <style>
 .tables{
     display: flex;
@@ -164,7 +212,7 @@ export default{
  
 }
     .compteA{
-        background-color: rgb(102, 255, 0);
+        background-color: #66ff00;
         padding:20px;
         margin-right:5%;
         width:700px;
@@ -174,7 +222,7 @@ export default{
        
     }
     .compteB{
-        background-color: rgb(84, 84, 223);
+        background-color: #5454df;
         padding:20px;
         margin-right:5%;
         width:700px;

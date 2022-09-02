@@ -146,7 +146,7 @@ return [
             'keywords'       => '',
             'category'       => '',
             'manager'        => '',
-            'company'        => '',
+            'company'        => 'Maatwebsite',
         ],
 
     ],

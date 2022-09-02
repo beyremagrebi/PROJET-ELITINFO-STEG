@@ -103,10 +103,12 @@ export default{
                 
                 this.loadA=false;
                 this.compteA=response.data;
+                this.analyse(this.compteA);
         })
         Axios.post('http://127.0.0.1:8000/api/searchB',this.form).then(response=>{
             this.loadB=false;
                 this.compteB=response.data;
+                this.analyse(this.compteB)
                 
         })
          this.block=false
@@ -122,6 +124,23 @@ Axios.get("http://127.0.0.1:8000/api/listeCompte").then(response=>{
       },
       showAlert() {
         this.dismissCountDown = this.dismissSecs
+      },
+      analyse(table){
+        let count;
+        let code='';
+        for(let i=0;i<table.length;i++){
+            code=table[i].code;
+            count =0;
+            table[i].id=i;
+            for(let j=0;j<table.length;j++){
+                if(code==table[j].code){
+                    
+                    count++;
+                   table[i].analyse=count;
+                   
+                }
+            }
+        }
       }
  },
  computed:{
@@ -159,7 +178,6 @@ Axios.get("http://127.0.0.1:8000/api/listeCompte").then(response=>{
         if(this.form.selected=='null'){
             return "form-control is-invalid"
         }
-        console.log(this.form.selected)
         return "form-control"
     }
  },

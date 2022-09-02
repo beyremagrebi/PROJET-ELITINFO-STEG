@@ -25,15 +25,15 @@ class SearchController extends Controller
             ->where('code',$codeb)->whereBetween('dateOperation',[$debut,$fin])->orderby('dateOperation','DESC')->get();
 
         $date=[['Date Debut'=>$debut,'Date Fin'=>$fin,'Code Compte Bancaire'=>$codeb]];
-        $comptes=[];
-        foreach($compteA as $value){
-            array_push($comptes,$value);
-        }
-        foreach($compteB as $value){
-            array_push($comptes,$value);
-        }
+        // $comptes=[];
+        // foreach($compteA as $value){
+        //     array_push($comptes,$value);
+        // }
+        // foreach($compteB as $value){
+        //     array_push($comptes,$value);
+        // }
        
-        $arrays=[$date,$comptes];
+        $arrays=[$date,$compteA,$compteB];
      
        
 
